@@ -9,19 +9,19 @@ class TranscriptionData:
     def __init__(
         self,
         text: str,
-        metadata: Optional[Dict[str, Any]] = None,
         source: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None,
     ):
         """Initialize transcription data.
 
         Args:
             text: The transcription text content
-            metadata: Optional metadata (e.g., timestamp, speaker info)
             source: Source identifier (filename, URL, etc.)
+            metadata: Optional metadata (e.g., timestamp, speaker info)
         """
         self.text = text
-        self.metadata = metadata or {}
         self.source = source
+        self.metadata = metadata or {}
 
     def __repr__(self) -> str:
         """String representation."""

@@ -5,10 +5,11 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import List, Sequence, Union
 
-from iptag.transcriptions.loader.models import TranscriptionData
+from iptag.transcriptions.models import TranscriptionData
+from iptag.utils.logging import LoggerMixin
 
 
-class TranscriptionLoader(ABC):
+class TranscriptionLoader(ABC, LoggerMixin):
     """Abstract base class for transcription loaders.
 
     This defines the interface that all concrete loaders must implement.

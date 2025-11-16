@@ -27,6 +27,7 @@ class TxtTranscriptionLoader(TranscriptionLoader):
 
     def load(self, source: Union[str, Path], **kwargs) -> TranscriptionData:
         """Load transcription from a text file."""
+        self.logger.debug(f"Loading TXT transcription from source: {source}")
         path = Path(source)
         if not path.exists():
             raise FileNotFoundError(f"File not found: {source}")
@@ -42,13 +43,16 @@ class TxtTranscriptionLoader(TranscriptionLoader):
             "file_name": path.name,
             "encoding": self.encoding,
         }
-
+        self.logger.debug(f"Loaded transcription of size {len(text)} characters")
         return TranscriptionData(text=text, metadata=metadata, source=str(source))
 
     def load_multiple(
         self, sources: Sequence[Union[str, Path]], **kwargs
     ) -> List[TranscriptionData]:
         """Load multiple text files."""
+        self.logger.debug(
+            f"Loading multiple TXT transcriptions from sources: {sources}"
+        )
         return [self.load(source, **kwargs) for source in sources]
 
     def validate_source(self, source: Union[str, Path]) -> bool:

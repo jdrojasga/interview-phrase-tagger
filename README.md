@@ -11,6 +11,14 @@ The main goals are:
 
 ---
 
+## ChatGPT
+
+- First attempt conversation [link](https://chatgpt.com/c/690792c9-c59c-8328-a70b-8f502585bb81)
+- spaCy tokenizer model [link](https://spacy.io/models?utm_source=chatgpt.com)
+- Elektra model [link](https://huggingface.co/Recognai/zeroshot_selectra_medium)
+
+---
+
 ## Features
 
 - 🔍 **Phrase-level tagging** of interview text (multi-label).
@@ -172,6 +180,9 @@ interview-phrase-tagger/
 │       ├── topics/
 │       │   ├── __init__.py
 │       │   └── schema.py         # dynamic topic definitions
+│       ├── transcriptions/
+│       │   ├── __init__.py
+│       │   └── loader/
 │       ├── pipeline/
 │       │   ├── __init__.py
 │       │   └── tagging.py        # end-to-end pipeline

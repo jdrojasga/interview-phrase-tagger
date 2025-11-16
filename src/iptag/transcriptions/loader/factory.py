@@ -4,12 +4,14 @@ from typing import Dict
 
 from iptag.transcriptions.loader.base import TranscriptionLoader
 from iptag.transcriptions.loader.config import TranscriptionLoaderConfig
+from iptag.utils.logging import get_logger
 
 
 class TranscriptionLoaderFactory:
     """Factory class to create transcription loader instances."""
 
     _registry: Dict[str, type] = {}
+    logger = get_logger(__name__)
 
     @classmethod
     def register(cls, loader_type: str, loader_cls: type) -> None:
@@ -39,6 +41,7 @@ class TranscriptionLoaderFactory:
         Raises:
             ValueError: If loader type is not registered
         """
+        cls.logger.debug(f"Creating loader from config: {config}")
         loader_type = config.type
         if loader_type not in cls._registry:
             raise ValueError(f"Unknown loader type: {loader_type}")

@@ -1,0 +1,13 @@
+hypothesis_template: "Este texto trata sobre {}."
+threshold: 0.4
+categories:
+  - name: experiencia_laboral
+    label: "experiencia laboral y trayectoria profesional"
+  - name: educacion
+    label: "educacion, estudios y formacion academica"
+  - name: habilidades_tecnicas
+    label: "habilidades tecnicas y conocimientos de tecnologia"
+  - name: motivacion
+    label: "motivacion personal y razones para aplicar al cargo"
+  - name: expectativas_salariales
+    label: "expectativas salariales y compensacion economica"

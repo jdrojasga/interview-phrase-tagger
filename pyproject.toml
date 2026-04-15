@@ -16,6 +16,7 @@ dependencies = [
     "torch>=2.1.0,<2.3.0",
     "numpy<2.0",
     "pyyaml>=6.0",
+    "rich>=13.7.0",
 ]
 
 # Expose the CLI command `iptag`

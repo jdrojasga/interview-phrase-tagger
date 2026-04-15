@@ -12,6 +12,7 @@ from iptag.classifier import (
     classify_transcription,
     load_categories_from_yaml,
 )
+from iptag.presentation import render_to_html, render_to_terminal
 from iptag.transcriptions.loader import (
     TranscriptionLoaderConfig,
     TranscriptionLoaderFactory,
@@ -37,7 +38,12 @@ def classify(
     output: Optional[Path] = typer.Option(
         None,
         "--output",
-        help="Path to write JSON results. Prints to stdout if omitted.",
+        help="Path to write JSON results. If omitted, no JSON is written.",
+    ),
+    html: Optional[Path] = typer.Option(
+        None,
+        "--html",
+        help="Path to write a standalone HTML report.",
     ),
 ) -> None:
     """Classify sentences in a transcription by topic categories."""
@@ -54,13 +60,14 @@ def classify(
     classifier = ZeroShotClassifier(model_name_or_path=model)
     classify_transcription(transcription, classifier, categories)
 
-    results = [asdict(r) for r in transcription.metadata["classifications"]]
+    render_to_terminal(transcription)
 
     if output:
+        results = [asdict(r) for r in transcription.metadata["classifications"]]
         with open(output, "w") as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
         typer.echo(f"Results written to {output}")
-    else:
-        for r in results:
-            assigned = ", ".join(r["labels"]) if r["labels"] else "(none)"
-            typer.echo(f"[{assigned}] {r['text']}")
+
+    if html:
+        render_to_html(transcription, html)
+        typer.echo(f"HTML report written to {html}")

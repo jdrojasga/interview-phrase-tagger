@@ -8,10 +8,12 @@ from iptag.transcriptions.loader.base import (
     TranscriptionData,
     TranscriptionLoader,
 )
-from iptag.transcriptions.loader.factory import register_loader
+from iptag.transcriptions.loader.factory import (
+    TranscriptionLoaderFactory,
+)
 
 
-@register_loader("gdocs")
+@TranscriptionLoaderFactory.register("gdocs")
 class GDocsTranscriptionLoader(TranscriptionLoader):
     """Loader for Google Docs transcriptions.
 
@@ -24,6 +26,7 @@ class GDocsTranscriptionLoader(TranscriptionLoader):
         Args:
             credentials_path: Path to Google API credentials JSON
         """
+        super().__init__()  # Initialize LoggerMixin
         self.credentials_path = credentials_path
         self._service = None
 
@@ -48,7 +51,7 @@ class GDocsTranscriptionLoader(TranscriptionLoader):
             TranscriptionData object
         """
         # Extract doc ID from URL if needed
-        doc_id = self._extract_doc_id(str(source))
+        self._extract_doc_id(str(source))
 
         # Placeholder implementation
         # Real implementation would use:

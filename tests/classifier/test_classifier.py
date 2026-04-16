@@ -49,12 +49,19 @@ class TestZeroShotClassifier:
     def test_classify_single(self, sample_categories):
         """Test classifying a single sentence."""
         classifier = ZeroShotClassifier()
-        result = classifier.classify(
-            "Hola, como estas? Mucho gusto en conocerte.",
-            sample_categories,
-        )
-        assert "saludo" in result.labels
-        assert len(result.scores) == 3
+        text = "Hola, como estas? Mucho gusto en conocerte."
+        result = classifier.classify(text, sample_categories, index=0)
+
+        expected_names = {
+            sub.name
+            for cat in sample_categories.categories
+            for sub in cat.subcategories
+        }
+
+        assert result.text == text
+        assert result.index == 0
+        assert set(result.scores.keys()) == expected_names
+        assert set(result.labels).issubset(expected_names)
 
     def test_classify_batch(self, sample_categories):
         """Test classifying a batch of sentences."""

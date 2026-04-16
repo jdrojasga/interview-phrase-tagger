@@ -68,7 +68,8 @@ class ZeroShotClassifier(LoggerMixin):
             ClassificationResult with assigned labels and scores.
         """
         pipe = self._get_pipeline()
-        candidate_labels = [sub.label for sub in categories.all_subcategories()]
+        subcategories = categories.all_subcategories()
+        candidate_labels = [sub.label for sub in subcategories]
 
         result = pipe(
             text,
@@ -77,7 +78,7 @@ class ZeroShotClassifier(LoggerMixin):
             multi_label=True,
         )
 
-        label_to_name = {sub.label: sub.name for sub in categories.all_subcategories()}
+        label_to_name = {sub.label: sub.name for sub in subcategories}
         scores = {
             label_to_name[label]: score
             for label, score in zip(result["labels"], result["scores"])

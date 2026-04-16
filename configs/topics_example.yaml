@@ -1,15 +1,19 @@
+# Example configuration for interview_topics categories.
+# Use this as a template for your own topic config.
 hypothesis_template: "Este texto trata sobre {}."
-threshold: 0.5
+threshold: 0.4
 categories:
-  - name: experiencia_laboral
-    label: "experiencia laboral y empleo"
-    description: "Preguntas y respuestas sobre trabajos y experiencia profesional previa"
-  - name: educacion
-    label: "educacion y formacion academica"
-    description: "Temas relacionados con estudios, titulos y formacion"
-  - name: habilidades
-    label: "habilidades y competencias tecnicas"
-    description: "Habilidades tecnicas y blandas del candidato"
-  - name: motivacion
-    label: "motivacion y expectativas"
-    description: "Motivacion personal, expectativas salariales y de carrera"
+  - name: grupo_a
+    label: "Nombre del Grupo A"
+    description: "Descripción opcional del grupo (aparece en la UI)"
+    subcategories:
+      - name: subtema_1
+        label: "etiqueta para el clasificador del subtema 1"
+        description: "Descripción opcional del subtema (aparece en la UI)"
+      - name: subtema_2
+        label: "etiqueta para el clasificador del subtema 2"
+  - name: grupo_b
+    label: "Nombre del Grupo B"
+    subcategories:
+      - name: subtema_3
+        label: "etiqueta para el clasificador del subtema 3"

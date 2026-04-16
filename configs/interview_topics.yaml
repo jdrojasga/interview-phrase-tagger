@@ -1,13 +1,30 @@
 hypothesis_template: "Este texto trata sobre {}."
 threshold: 0.4
 categories:
-  - name: experiencia_laboral
-    label: "experiencia laboral y trayectoria profesional"
-  - name: educacion
-    label: "educacion, estudios y formacion academica"
-  - name: habilidades_tecnicas
-    label: "habilidades tecnicas y conocimientos de tecnologia"
-  - name: motivacion
-    label: "motivacion personal y razones para aplicar al cargo"
-  - name: expectativas_salariales
-    label: "expectativas salariales y compensacion economica"
+  - name: experiencia
+    label: "Experiencia y Formación"
+    description: "Antecedentes profesionales y académicos del candidato"
+    subcategories:
+      - name: experiencia_laboral
+        label: "experiencia laboral y trayectoria profesional"
+        description: "Trabajos anteriores, roles y logros profesionales"
+      - name: educacion
+        label: "educacion, estudios y formacion academica"
+        description: "Títulos, certificaciones y formación formal"
+  - name: competencias
+    label: "Competencias"
+    description: "Habilidades y conocimientos del candidato"
+    subcategories:
+      - name: habilidades_tecnicas
+        label: "habilidades tecnicas y conocimientos de tecnologia"
+        description: "Lenguajes, frameworks, herramientas y plataformas"
+  - name: candidatura
+    label: "Candidatura"
+    description: "Motivación e interés del candidato en el cargo"
+    subcategories:
+      - name: motivacion
+        label: "motivacion personal y razones para aplicar al cargo"
+        description: "Por qué quiere el puesto y qué le motiva"
+      - name: expectativas_salariales
+        label: "expectativas salariales y compensacion economica"
+        description: "Rango salarial esperado y beneficios"

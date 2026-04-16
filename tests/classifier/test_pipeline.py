@@ -4,7 +4,11 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from iptag.classifier.config import CategoriesConfig, CategoryDefinition
+from iptag.classifier.config import (
+    CategoriesConfig,
+    CategoryDefinition,
+    SubcategoryDefinition,
+)
 from iptag.classifier.models import ClassificationResult
 from iptag.classifier.pipeline import classify_transcription
 from iptag.transcriptions.models import TranscriptionData
@@ -26,8 +30,18 @@ def sample_categories():
     """Sample categories config."""
     return CategoriesConfig(
         categories=[
-            CategoryDefinition(name="saludo", label="saludo"),
-            CategoryDefinition(name="despedida", label="despedida"),
+            CategoryDefinition(
+                name="saludo",
+                label="saludo",
+                subcategories=[SubcategoryDefinition(name="saludo", label="saludo")],
+            ),
+            CategoryDefinition(
+                name="despedida",
+                label="despedida",
+                subcategories=[
+                    SubcategoryDefinition(name="despedida", label="despedida"),
+                ],
+            ),
         ],
     )
 

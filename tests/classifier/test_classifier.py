@@ -3,7 +3,11 @@
 import pytest
 
 from iptag.classifier.classifier import ZeroShotClassifier
-from iptag.classifier.config import CategoriesConfig, CategoryDefinition
+from iptag.classifier.config import (
+    CategoriesConfig,
+    CategoryDefinition,
+    SubcategoryDefinition,
+)
 
 
 @pytest.fixture
@@ -11,9 +15,27 @@ def sample_categories():
     """Sample categories for testing."""
     return CategoriesConfig(
         categories=[
-            CategoryDefinition(name="saludo", label="saludo y presentacion"),
-            CategoryDefinition(name="animales", label="animales y mascotas"),
-            CategoryDefinition(name="trabajo", label="experiencia laboral"),
+            CategoryDefinition(
+                name="saludo",
+                label="saludo y presentacion",
+                subcategories=[
+                    SubcategoryDefinition(name="saludo", label="saludo y presentacion"),
+                ],
+            ),
+            CategoryDefinition(
+                name="animales",
+                label="animales y mascotas",
+                subcategories=[
+                    SubcategoryDefinition(name="animales", label="animales y mascotas"),
+                ],
+            ),
+            CategoryDefinition(
+                name="trabajo",
+                label="experiencia laboral",
+                subcategories=[
+                    SubcategoryDefinition(name="trabajo", label="experiencia laboral"),
+                ],
+            ),
         ],
         threshold=0.5,
     )

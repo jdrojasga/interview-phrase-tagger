@@ -2,6 +2,7 @@
 
 import pytest
 import yaml
+from pydantic import ValidationError
 
 from iptag.classifier.config import (
     CategoriesConfig,
@@ -16,12 +17,14 @@ class TestSubcategoryDefinition:
     """Tests for SubcategoryDefinition model."""
 
     def test_create_with_required_fields(self):
+        """Test creating a SubcategoryDefinition with only required fields."""
         sub = SubcategoryDefinition(name="trabajo", label="experiencia laboral")
         assert sub.name == "trabajo"
         assert sub.label == "experiencia laboral"
         assert sub.description is None
 
     def test_create_with_description(self):
+        """Test creating a SubcategoryDefinition with an optional description."""
         sub = SubcategoryDefinition(
             name="trabajo",
             label="experiencia laboral",
@@ -35,6 +38,7 @@ class TestCategoryDefinition:
     """Tests for CategoryDefinition model."""
 
     def test_create_with_required_fields(self):
+        """Test creating a CategoryDefinition with only required fields."""
         cat = CategoryDefinition(
             name="experiencia",
             label="Experiencia",
@@ -46,6 +50,7 @@ class TestCategoryDefinition:
         assert len(cat.subcategories) == 1
 
     def test_create_with_description(self):
+        """Test creating a CategoryDefinition with an optional description."""
         cat = CategoryDefinition(
             name="experiencia",
             label="Experiencia",
@@ -55,7 +60,8 @@ class TestCategoryDefinition:
         assert cat.description == "Grupo de experiencia"
 
     def test_subcategories_required(self):
-        with pytest.raises(Exception):
+        """Test that subcategories field is required."""
+        with pytest.raises(ValidationError):
             CategoryDefinition(name="experiencia", label="Experiencia")
 
 
@@ -84,30 +90,27 @@ class TestCategoriesConfig:
         return CategoriesConfig(categories=cats, **kwargs)
 
     def test_defaults(self):
+        """Test that CategoriesConfig has correct default values."""
         config = self._make_config()
         assert config.hypothesis_template == "Este texto trata sobre {}."
         assert config.threshold == 0.5
 
     def test_custom_threshold(self):
+        """Test setting a custom threshold value."""
         config = self._make_config(threshold=0.7)
         assert config.threshold == 0.7
 
     def test_multiple_categories(self):
+        """Test that multiple categories are stored correctly."""
         config = self._make_config()
         assert len(config.categories) == 2
 
     def test_all_subcategories_returns_flat_list(self):
+        """Test that all_subcategories returns a flat list across all categories."""
         config = self._make_config()
         subs = config.all_subcategories()
         assert len(subs) == 3
         assert [s.name for s in subs] == ["trabajo", "educacion", "habilidades"]
-
-    def test_all_subcategories_preserves_order(self):
-        config = self._make_config()
-        subs = config.all_subcategories()
-        assert subs[0].name == "trabajo"
-        assert subs[1].name == "educacion"
-        assert subs[2].name == "habilidades"
 
 
 @pytest.mark.unit
@@ -115,6 +118,7 @@ class TestLoadCategoriesFromYaml:
     """Tests for YAML loading."""
 
     def test_load_valid_yaml(self, tmp_path):
+        """Test loading a valid YAML file into CategoriesConfig."""
         data = {
             "hypothesis_template": "Trata sobre {}.",
             "threshold": 0.6,
@@ -139,6 +143,7 @@ class TestLoadCategoriesFromYaml:
         assert config.categories[0].subcategories[1].description == "desc"
 
     def test_all_subcategories_from_loaded_yaml(self, tmp_path):
+        """Test all_subcategories returns correct flat list from YAML-loaded config."""
         data = {
             "categories": [
                 {
@@ -163,5 +168,6 @@ class TestLoadCategoriesFromYaml:
         assert [s.name for s in subs] == ["a", "b", "c"]
 
     def test_load_missing_file(self, tmp_path):
+        """Test that FileNotFoundError is raised for a missing YAML file."""
         with pytest.raises(FileNotFoundError):
             load_categories_from_yaml(tmp_path / "missing.yaml")

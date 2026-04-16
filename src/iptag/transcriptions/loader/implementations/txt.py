@@ -8,10 +8,12 @@ from iptag.transcriptions.loader.base import (
     TranscriptionData,
     TranscriptionLoader,
 )
-from iptag.transcriptions.loader.factory import register_loader
+from iptag.transcriptions.loader.factory import (
+    TranscriptionLoaderFactory,
+)
 
 
-@register_loader("txt")
+@TranscriptionLoaderFactory.register("txt")
 class TxtTranscriptionLoader(TranscriptionLoader):
     """Loader for plain text transcription files."""
 
@@ -22,6 +24,7 @@ class TxtTranscriptionLoader(TranscriptionLoader):
             encoding: Text encoding to use
             strip_whitespace: Whether to strip leading/trailing whitespace
         """
+        super().__init__()  # Initialize LoggerMixin
         self.encoding = encoding
         self.strip_whitespace = strip_whitespace
 

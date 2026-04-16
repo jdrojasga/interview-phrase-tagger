@@ -6,6 +6,7 @@ https://docs.python.org/3/library/logging.html
 """
 
 import logging
+from typing import Any
 
 from iptag.settings import IptagSettings
 
@@ -42,14 +43,32 @@ def get_logger(name: str, level: int = LOGGING_LEVEL) -> logging.Logger:
     return logger
 
 
-class LoggerMixin:
-    """Mixin class that provides automatic logger configuration."""
+def get_logger_for(obj: Any, level: int = LOGGING_LEVEL) -> logging.Logger:
+    """Get a logger for the given object according to its class and qualname.
 
-    @property
-    def logger(self) -> logging.Logger:
-        """Get a logger instance named after the concrete class."""
-        if not hasattr(self, "_logger"):
-            self._logger = get_logger(
-                f"{self.__class__.__module__}.{self.__class__.__name__}"
-            )
-        return self._logger
+    Arguments:
+        obj (Any): The object to set the logger to
+        level (int): The level to set the logger to.
+
+    Returns:
+        logging.Logger: The logger for the object.
+    """
+    module = obj.__class__.__module__
+    qualname = obj.__class__.__qualname__
+
+    return get_logger(f"{module}.{qualname}", level)
+
+
+class LoggerMixin:
+    """Mixin class that provides automatic logger configuration.
+
+    This mixin can be inherited by any class to automatically set up a logger specific
+    to that class.
+    """
+
+    def __init__(self, *args, **kwargs):  # noqa: D417
+        """Initialize the logger."""
+        # Call super initialization to support cooperative multiple inheritance
+        # This ensures other mixins in the MRO chain get initialized
+        super().__init__(*args, **kwargs)
+        self.logger = get_logger_for(self)

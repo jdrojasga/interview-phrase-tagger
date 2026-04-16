@@ -69,5 +69,5 @@ def classify(
         typer.echo(f"Results written to {output}")
 
     if html:
-        render_to_html(transcription, html)
+        render_to_html(transcription, html, categories=categories)
         typer.echo(f"HTML report written to {html}")

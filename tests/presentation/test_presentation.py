@@ -58,14 +58,17 @@ def test_category_counts_aggregates() -> None:
 
 @pytest.mark.unit
 def test_render_to_html_writes_marks(tmp_path) -> None:
-    """HTML output contains one <mark> per classified sentence and filters."""
+    """HTML output contains one <mark> per classified sentence and filter cards."""
     out = tmp_path / "out.html"
     render_to_html(_make_transcription(), out)
     content = out.read_text(encoding="utf-8")
-    assert content.count("<mark ") == 2
+    # All 3 classified sentences get a <mark data-idx=...> element
+    assert content.count("<mark ") == 3
+    # Category names appear in embedded JS data and CSS
     assert "cat-alpha" in content
     assert "cat-beta" in content
-    assert 'data-cls="cat-alpha"' in content
+    # Filter cards use data-name with the category name
+    assert 'data-name="alpha"' in content
 
 
 @pytest.mark.unit

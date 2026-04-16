@@ -16,6 +16,10 @@ class TranscriptionLoader(ABC, LoggerMixin):
     Follows Interface Segregation Principle - only essential methods.
     """
 
+    def __init__(self, *args, **kwargs):
+        """Initialize the transcription loader with logging capability."""
+        super().__init__(*args, **kwargs)
+
     @abstractmethod
     def load(self, source: Union[str, Path], **kwargs) -> TranscriptionData:
         """Load a single transcription from the specified source.

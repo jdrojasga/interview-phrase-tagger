@@ -7,12 +7,21 @@ import yaml
 from pydantic import BaseModel
 
 
-class CategoryDefinition(BaseModel):
-    """Definition of a single classification category."""
+class SubcategoryDefinition(BaseModel):
+    """Definition of a single classification subcategory (classifier label)."""
 
     name: str
     label: str
     description: Optional[str] = None
+
+
+class CategoryDefinition(BaseModel):
+    """A named group of subcategories."""
+
+    name: str
+    label: str
+    description: Optional[str] = None
+    subcategories: list[SubcategoryDefinition]
 
 
 class CategoriesConfig(BaseModel):
@@ -21,6 +30,10 @@ class CategoriesConfig(BaseModel):
     categories: list[CategoryDefinition]
     hypothesis_template: str = "Este texto trata sobre {}."
     threshold: float = 0.5
+
+    def all_subcategories(self) -> list[SubcategoryDefinition]:
+        """Flat list of all subcategories across all categories, in order."""
+        return [sub for cat in self.categories for sub in cat.subcategories]
 
 
 def load_categories_from_yaml(path: Path) -> CategoriesConfig:

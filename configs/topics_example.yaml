@@ -1,7 +1,7 @@
 # Example configuration for interview_topics categories.
 # Use this as a template for your own topic config.
 hypothesis_template: "Este texto trata sobre {}."
-threshold: 0.4
+threshold: 0.5
 categories:
   - name: grupo_a
     label: "Nombre del Grupo A"

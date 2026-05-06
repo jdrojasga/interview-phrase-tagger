@@ -7,6 +7,7 @@ class IptagSettings(BaseSettings):
     """Application settings for Interview Phrase Tagger (iptag)."""
 
     debug: bool = False
+    classifier_model: str = "balanced"
 
     class Config:
         """Configuration for IptagSettings."""

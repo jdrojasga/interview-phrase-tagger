@@ -232,10 +232,8 @@ def render_to_html(
 
     phrases_json = json.dumps(_phrases_payload(transcription), ensure_ascii=False)
     cats_json = json.dumps(cat_defs, ensure_ascii=False)
-    js = (
-        _JS_TEMPLATE
-        .replace("/*__PHRASES_JSON__*/", phrases_json)
-        .replace("/*__CATS_JSON__*/", cats_json)
+    js = _JS_TEMPLATE.replace("/*__PHRASES_JSON__*/", phrases_json).replace(
+        "/*__CATS_JSON__*/", cats_json
     )
 
     source = escape(transcription.source or "transcription")
@@ -311,10 +309,7 @@ def _build_cat_defs(
 def _phrases_payload(transcription: TranscriptionData) -> list[dict]:
     """Return per-phrase data for the embedded JS array."""
     results = transcription.metadata.get("classifications", [])
-    return [
-        {"idx": r.index, "text": r.text, "scores": r.scores}
-        for r in results
-    ]
+    return [{"idx": r.index, "text": r.text, "scores": r.scores} for r in results]
 
 
 def _build_filters_html(cat_defs: list[dict]) -> str:
@@ -328,7 +323,7 @@ def _build_filters_html(cat_defs: list[dict]) -> str:
         )
         parts.append(
             f'<div class="filter-card" data-name="{escape(d["name"])}">'
-            f'<label>'
+            f"<label>"
             f'<input type="checkbox" checked>'
             f'<span class="swatch" style="background:{d["color"]}"></span>'
             f"{escape(d['label'])}"

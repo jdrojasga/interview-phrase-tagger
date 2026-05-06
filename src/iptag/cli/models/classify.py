@@ -27,10 +27,10 @@ def classify(
     categories_file: Path = typer.Option(
         ..., "--categories", help="Path to the categories YAML config."
     ),
-    model: str = typer.Option(
-        ZeroShotClassifier.DEFAULT_MODEL,
+    model: Optional[str] = typer.Option(
+        None,
         "--model",
-        help="HuggingFace model ID or local path.",
+        help="Catalog alias ('fast', 'balanced', 'accurate') or HuggingFace model ID. Defaults to CLASSIFIER_MODEL env var (or 'balanced').",
     ),
     threshold: Optional[float] = typer.Option(
         None, "--threshold", help="Override confidence threshold from config."

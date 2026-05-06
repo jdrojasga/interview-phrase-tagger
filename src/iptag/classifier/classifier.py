@@ -4,8 +4,10 @@ from typing import Optional
 
 from transformers import pipeline
 
+from iptag.classifier.catalog import resolve_model
 from iptag.classifier.config import CategoriesConfig
 from iptag.classifier.models import ClassificationResult
+from iptag.settings import IptagSettings
 from iptag.utils.logging import LoggerMixin
 
 
@@ -16,23 +18,23 @@ class ZeroShotClassifier(LoggerMixin):
     against a set of candidate labels without any training data.
     """
 
-    DEFAULT_MODEL = "Recognai/zeroshot_selectra_medium"
-
     def __init__(
         self,
-        model_name_or_path: str = DEFAULT_MODEL,
+        model_name_or_path: Optional[str] = None,
         device: str = "cpu",
         batch_size: int = 8,
     ):
         """Initialize the classifier.
 
         Args:
-            model_name_or_path: HuggingFace model ID or local path.
+            model_name_or_path: Catalog alias ('fast', 'balanced', 'accurate'),
+                HuggingFace model ID, or None to read from CLASSIFIER_MODEL env var.
             device: Device for inference ('cpu' or 'cuda').
             batch_size: Batch size for classify_batch.
         """
         super().__init__()
-        self.model_name_or_path = model_name_or_path
+        alias_or_id = model_name_or_path or IptagSettings().classifier_model
+        self.model_name_or_path = resolve_model(alias_or_id)
         self.device = device
         self.batch_size = batch_size
         self._pipeline: Optional[pipeline] = None
@@ -69,7 +71,7 @@ class ZeroShotClassifier(LoggerMixin):
         """
         pipe = self._get_pipeline()
         subcategories = categories.all_subcategories()
-        candidate_labels = [sub.label for sub in subcategories]
+        candidate_labels = [sub.description or sub.label for sub in subcategories]
 
         result = pipe(
             text,
@@ -78,9 +80,11 @@ class ZeroShotClassifier(LoggerMixin):
             multi_label=True,
         )
 
-        label_to_name = {sub.label: sub.name for sub in subcategories}
+        candidate_to_name = {
+            (sub.description or sub.label): sub.name for sub in subcategories
+        }
         scores = {
-            label_to_name[label]: score
+            candidate_to_name[label]: score
             for label, score in zip(result["labels"], result["scores"])
         }
         assigned = [
